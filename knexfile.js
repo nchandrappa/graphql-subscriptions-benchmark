@@ -17,7 +17,7 @@ module.exports = {
                 done(null, connection);
                 return;
             }
-
+            console.log('Connection String: ' + process.env.PG_CONNECTION_STRING);
             listening = true;
             conn.query('LISTEN benchmark', function(err) {
                 if (err) {

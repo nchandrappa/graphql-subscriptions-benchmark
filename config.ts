@@ -15,6 +15,7 @@ interface template {
 interface configData {
     query: string;
     timePeriod?: number;
+    statsCountInsertInterval?: number;
     variables?: Object;
     headers?: Object;
     template?: template;
@@ -25,7 +26,7 @@ export class Config {
     private filePath: string;
     private data: any;
 
-    constructor(filePath: string) {
+constructor(filePath: string) {
         this.filePath = filePath;
     }
 
@@ -75,6 +76,21 @@ export class Config {
             return Math.floor((operations.length/data.timePeriod));
         }
     }
+
+    public getStatsCountInsertInterval(): number {
+
+        if (Array.isArray(this.data)) {
+            return null;
+        } else {
+            const data = <configData>this.data;
+            if (!data.statsCountInsertInterval) {
+                return 100;
+            }
+            return data.statsCountInsertInterval;
+        }
+    }
+
+
 
     private generate(operation: configData): OperationOptions[] {
         let operations: OperationOptions[] = [];

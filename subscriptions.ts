@@ -69,7 +69,7 @@ export class Client {
         this.connectionCallback = connectionCallback;
         this.connectionId = connectionId;
         this.nextOperationId = 0;
-
+        
         this.connect();
     }
 
@@ -174,7 +174,7 @@ export class Client {
 
     private connect() {
         this.client = new this.wsImpl(this.url, 'graphql-ws');
-
+        // console.log("graphql url: " + this.url);
         this.client.onopen = async () => {
             if (this.status === this.wsImpl.OPEN) {
                 // send connection_init message
@@ -231,7 +231,6 @@ export class Client {
         } catch(e) {
             throw new Error(`Message must be JSON-parseable. Got: ${receivedData}`);
         }
-
         switch (parsedMessage.type) {
             case 'connection_error':
                 if (this.connectionCallback) {

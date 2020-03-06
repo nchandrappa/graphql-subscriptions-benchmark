@@ -17,6 +17,8 @@ let endpoint: string = undefined;
 
 let configFilePath: string = undefined;
 
+let statsCountInsertInterval: number = 0;
+
 interface eventData {
     connection_id: number;
     operation_id: number;
@@ -33,6 +35,10 @@ function subscribe(connectionId: any) {
     client[connectionId.toString()].subscribe(
     connections[connectionId-1],
         (data, opId, eventId, eventTime) => {
+            if (statsCountInsertInterval !=0 && eventDatas.length > statsCountInsertInterval) {
+                insertData();
+                eventDatas = [];
+            }
             eventDatas.push(
                 {
                     label: label,
@@ -46,6 +52,10 @@ function subscribe(connectionId: any) {
             )
         },
         (err, opId, eventId, eventTime) => {
+            if (statsCountInsertInterval !=0 && eventDatas.length > statsCountInsertInterval) {
+                insertData();
+                eventDatas = [];
+            }
             eventDatas.push(
                 {
                     label: label,
@@ -138,6 +148,7 @@ async function init() {
     config.readFile().then(
         () => {
             connections = config.getOperations();
+            statsCountInsertInterval = config.getStatsCountInsertInterval();
             const connectionLimit = config.getNumberOfConnectionPerSecond(connections);
             if (connectionLimit) {
                 timeoutObject = setInterval(distributeClients, 1000, endpoint, connections, connectionLimit);
@@ -149,9 +160,7 @@ async function init() {
             console.log(err);
         }
     );
-}
-
-;
+};
 
 
 
@@ -169,6 +178,7 @@ const insertData = (): Promise<any> => {
 function exit() {
     clearInterval(timeoutObject);
     closeClients();
+
     insertData().then(
         () => {
             knexConnection.destroy();

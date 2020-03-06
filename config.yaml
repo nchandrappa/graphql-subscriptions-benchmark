@@ -1,18 +1,30 @@
 query: |
-  subscription ($id: Int!) {
-    test(where: {id: {_eq: $id}}) {
-      id
-      name
+  subscription ($id: bigint!) {
+    user_account (where: {userid: {_eq: $id}}) {
+      accountname
+      givenname
+      familyname
+      city
+      company
+      user_privacies(order_by: {userprivacyid: desc}) {
+        usergenderprivacy
+        useremailprivacy
+        mobilephoneprivacy
+        createddate
+      }
     }
   }
 timePeriod: 2
+statsCountInsertInterval: 2
 variables:
   id: '1'
-headers: []
+headers:
+  content-type: 'application/json'
 template:
   range:
     start: 1
     end: 10
-  headers: []
+  headers: 
+    content-type: 'application/json'
   variables:
     - id

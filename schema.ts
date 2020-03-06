@@ -26,7 +26,7 @@ export class Events extends Model {
             required: ['label', 'connection_id', 'operation_id', 'event_number', 'event_data', 'event_time', 'is_error'],
             properties: {
                 label: {type: 'string'},
-                connection_id: {type: 'integer'},
+                connection_id: {type: 'integer'},   
                 operation_id: {type: 'integer'},
                 event_number: {type: 'integer'},
                 event_data: {type: 'json'},
