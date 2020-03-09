@@ -1,17 +1,16 @@
 query: |
   subscription ($id: bigint!) {
     user_account (where: {userid: {_eq: $id}}) {
-      accountname
-      givenname
-      familyname
-      city
-      company
-      user_privacies(order_by: {userprivacyid: desc}) {
-        usergenderprivacy
-        useremailprivacy
-        mobilephoneprivacy
-        createddate
-      }
+        accountname
+        givenname
+        familyname
+        city
+        user_orders(order_by: {orderid: desc}) {
+            orderid
+            ordertotal
+            orderdetails
+            ordertime
+        }
     }
   }
 timePeriod: 2
